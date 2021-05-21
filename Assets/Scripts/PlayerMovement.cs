@@ -4,19 +4,37 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    // Start is called before the first frame update
+    private Animator animator;
+
     void Start()
     {
-        
+        animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         float LookX = Input.GetAxis("Horizontal");
         float z = Input.GetAxis("Vertical");
 
         transform.Translate(0, 0, z * 15f * Time.deltaTime);
         transform.Rotate(Vector3.up * LookX * 100f * Time.deltaTime);
+
+        if(z != 0 || LookX != 0)
+        {
+            animator.SetBool("walk", true);
+        }
+        else
+        {
+            animator.SetBool("walk", false);
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(collision.collider.tag == "Obstacle")
+        {
+            animator.SetTrigger("damage");
+        }
     }
 }
