@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    // Start is called before the first frame update
+    private Animator animator;
+
     void Start()
     {
-        
+        animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -18,5 +19,29 @@ public class PlayerMovement : MonoBehaviour
 
         transform.Translate(0, 0, z * 15f * Time.deltaTime);
         transform.Rotate(Vector3.up * LookX * 100f * Time.deltaTime);
+    
+        if(LookX != 0 || z != 0)
+        {
+            animator.SetBool("walk", true);
+        }
+        else
+        {
+            animator.SetBool("walk", false);
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.collider.tag == "Obstacle")
+        {
+            animator.SetTrigger("damage");
+            GameManager.instance.AddScore(-1);
+        }
+
+        if(collision.collider.tag == "Enermy")
+        {
+            animator.SetTrigger("attack01");
+            GameManager.instance.OnPlayerDead();
+        }
     }
 }
