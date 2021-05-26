@@ -35,6 +35,13 @@ public class PlayerMovement : MonoBehaviour
         if(collision.collider.tag == "Obstacle")
         {
             animator.SetTrigger("damage");
+            GameManager.instance.AddScore(-1);
+        }
+
+        if (collision.collider.tag == "Enemy")
+        {
+            animator.SetTrigger("attack01");
+            GameManager.instance.OnPlayerDead();
         }
     }
 }
