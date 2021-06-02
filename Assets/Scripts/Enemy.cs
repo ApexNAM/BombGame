@@ -8,6 +8,7 @@ public class Enemy : MonoBehaviour
     private Rigidbody rb;
     public float speed = 20f;
 
+    private bool scored = false;
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -20,6 +21,17 @@ public class Enemy : MonoBehaviour
         {
             Vector3 tar = target.position - transform.position;
             rb.AddForce(tar * speed * Time.deltaTime);
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.tag =="Bullet" && !scored)
+        {
+            scored = true;
+            GameManager.instance.AddScore(1);
+            transform.position = new Vector3(Random.Range(-30,30),0.5f,Random.Range(-30, 30));
+            scored = false;
         }
     }
 }
