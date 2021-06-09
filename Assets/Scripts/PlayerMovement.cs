@@ -14,6 +14,11 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        if (GameManager.instance.isGameOver)
+        {
+            return;
+        }
+
         float LookX = Input.GetAxis("Horizontal");
         float z = Input.GetAxis("Vertical");
 
@@ -32,6 +37,11 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        if (GameManager.instance.isGameOver)
+        {
+            return;
+        }
+
         if(collision.collider.tag == "Obstacle")
         {
             animator.SetTrigger("damage");

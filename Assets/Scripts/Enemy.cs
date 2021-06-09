@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
+    public AudioSource audioSource;
+    public GameObject explosionEffect;
+
     public Transform target;
     private Rigidbody rb;
     public float speed = 20f;
@@ -13,6 +16,7 @@ public class Enemy : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         target = GameObject.FindWithTag("Player").transform;
+        audioSource = GetComponent<AudioSource>();
     }
 
     private void Update()
@@ -28,6 +32,8 @@ public class Enemy : MonoBehaviour
     {
         if(other.tag =="Bullet" && !scored)
         {
+            audioSource.Play();
+            Instantiate(explosionEffect, transform.position, transform.rotation);
             scored = true;
             GameManager.instance.AddScore(1);
             transform.position = new Vector3(Random.Range(-30,30),0.5f,Random.Range(-30, 30));
